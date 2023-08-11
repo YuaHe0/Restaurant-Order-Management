@@ -1,0 +1,157 @@
+{% extends 'web/base.html' %}
+{% block main_body %}
+
+  <div class="tables table1"  >
+    <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Cart</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0" style="height: 300px;">
+
+                <table class="table text-nowrap">
+                  <thead>
+                    <tr>
+                        <th with="30">#</th>
+                        <th>Dish</th>
+                        <th>Number</th>
+                        <th>Price</th>
+                        <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for product in request.session.cartlist.values %}
+
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                      <td>{{product.name}}</td>
+                      <td class="num">
+                          <i class="btn btn-default btn-xs" onclick="window.location='{% url 'web_cart_change' %}?pid={{product.id}}&num={{product.num|add:-1}}'">-</i>
+                          <span>{{product.num}}</span>
+                          <i class="btn btn-default btn-xs" onclick="window.location='{% url 'web_cart_change' %}?pid={{product.id}}&num={{product.num|add:1}}'">+</i>
+                      </td>
+                      <td><span class="badge bg-danger">${{product.price}}</span></td>
+                        <td><a href="{% url 'web_cart_delete' product.id %}" role="button">Delete</a></td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+
+                </table>
+              </div>
+      <li class="list-group-item">
+        <div class="form-check" >
+          <input  type="radio" name="ptype" checked value="1">Dine In
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          <input type="radio" name="ptype" value="2">Take Away
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="form-check" >
+            <input  type="radio" name="bank" checked value="1">Cash
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <input  type="radio" name="bank" value="2">Card
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <input type="radio" name="bank" value="3">Scan
+        </div>
+      </li>
+      <div class="panel-footer" style="height:50px">
+
+         <div style="width:120px;float:left;margin:5px 0px;">&nbsp&nbsp&nbsp&nbspTotal:$<span style="color:red;font-weight:bold">{{request.session.total_money}}</span></div>
+          <button type="submit" onclick="dosubmit()" class="btn btn-warning" style="width:130px;float:right">Pay</button>
+          <button type="button" onclick="window.location='{% url 'web_cart_clear' %}'" class="btn btn-info" style="width:70px;float:right">Clear</button>
+
+      </div>
+
+              <!-- /.card-body -->
+            </div>
+  </div>
+  <div class="tables table2" >
+
+  <div class="card card-primary">
+                <ul class="u2">
+                    <li><a href="{% url 'web_index'  %}">All</a></li>
+                    {% for category in categorylist %}
+                  <li><a href="{% url 'web_index_type' category.id%}">{{category.name}}</a></li>
+                    {% endfor %}
+                </ul>
+    <!-- /.card-header -->
+              <div class="card-body table-responsive p-0" style="height: 500px;">
+                <div class="row mt-4">
+                  {% for product in productlist %}
+
+                    <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                      <div class="caption">
+                          <div  class="box" >
+                              <div align="center" style="margin:2px">
+                                  <img src="/static/uploads/product/{{product.cover_pic}}" width="130" height="100" >
+                              </div>
+                              <h6 align="center" >{{product.name}}</h6>
+                              <div class="small-box">$<span>{{product.print}}</span>
+                                  <a href="{% url 'web_cart_add' product.id %}"><span style="color:red">add</span></a>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+  </div>
+<style>
+    .box{
+     border:2px;
+     border-style:groove;
+     width:140px;
+     height:170px;
+     margin:10px;
+     border-radius:5px
+
+    }
+    .small-box{
+    border:2px;
+
+    }
+</style>
+<script>
+    function dosubmit(){
+        if($("table.text-nowrap tr").length == 1){
+            alert("Empty Cart")
+
+            return;
+        }
+
+        if(!window.confirm("Pay?")){
+            return;
+        }
+        var ptype =$("input[name='ptype']:checked").val();
+        var bank =$("input[name='bank']:checked").val();
+        //alert(ptype+":"+bank);
+        $.ajax({
+            type:"get",
+            url:"{% url 'web_order_insert' %}",
+            dataType:"text",
+            data:{ptype:ptype,bank:bank},
+            success:function(res){
+                if(res == "Y"){
+                    alert("order add success");
+                    window.location.href = "{% url 'web_index' %}";
+                }else{
+                    alert("order add failed");
+                }
+            }
+
+        });
+
+
+
+    }
+
+
+
+
+
+</script>
+{% endblock %}

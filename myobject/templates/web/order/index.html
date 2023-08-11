@@ -1,0 +1,187 @@
+{% extends 'web/base.html' %}
+{% block main_body %}
+<div class="table3">
+<div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Order List</h3>
+              </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thread>
+            <tr>
+                <th>order id</th>
+                <th>operator</th>
+                <th>money</th>
+                <th>pay type</th>
+                <th>status</th>
+                <th>pay status</th>
+                <th>create_at</th>
+                <th>update_at</th>
+                <th>operation</th>
+            </tr>
+            </thread>
+            <tbody>
+            {% for order in orderlist %}
+            <tr>
+                <td>{{order.id}}</td>
+                <th>{{order.nickname}}</th>
+                <th>{{order.money}}</th>
+                <td>Cash</td>
+                <td>
+                    {% if order.status == 1 %}
+                    <span style="color:green">Processing</span>
+                    {% elif order.status == 2 %}
+                    <span style="color:red">Invalid</span>
+                    {% elif order.status == 3 %}
+                    <span style="color:blue">Done</span>
+                    {%  else %}
+                    <span style="color:red">Unknown</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if order.payment_status == 1 %}
+                    <span style="color:green">Unpaid</span>
+                    {% elif order.payment_status == 2 %}
+                    <span style="color:red">Paid</span>
+                    {% elif order.payment_status == 3 %}
+                    <span style="color:blue">Refund</span>
+                    {%  else %}
+                    <span style="color:red">Unknown</span>
+                    {% endif %}
+                </td>
+
+                <td>{{order.create_at}}</td>
+                <td>{{order.update_at}}</td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" onclick="doShow({{order.id}})" role="button" class="btn btn-danger">Detail</button>
+                        {% if order.status == 1 %}
+                        {% if order.payment_status == 1 %}
+                        <button type="button" onclick="doPay({{order.id}},2)" class="btn btn-danger" >Pay</button>
+                        {% endif %}
+                        {%  if order.payment_status == 2 %}
+                        <button type="button" onclick="doPay({{order.id}},1)" class="btn btn-danger" >Unpaid</button>
+                        {% endif %}
+
+                        <button type="button" onclick="doChangeStatus({{order.id}},3)" class="btn btn-danger">Done</button>
+                        <button type="button" onclick="doChangeStatus({{order.id}},2)" class="btn btn-danger">Delete</button>
+                        {% endif %}
+
+                    </div>
+                </td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<div class="col-sm-12 col-md-7">
+    <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+        <ul class="pagination">
+            <li class="paginate_button page-item previous " id="example2_previous">
+                <a href="{% url 'web_order_index' pIndex|add:-1 %}?{{mywhere|join:'&'}}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+            </li>
+            {% for p in plist %}
+            <li  class="paginate_button page-item" id="myDIV">
+                <a href="{% url 'web_order_index' p %}?{{mywhere|join:'&'}}" aria-controls="example2"  tabindex="0" class="page-link">{{p}}</a>
+            </li>
+            {% endfor %}
+
+            <li class="paginate_button page-item next" id="example2_next">
+                <a href="{% url 'web_order_index' pIndex|add:1 %}?{{mywhere|join:'&'}}" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+            </li>
+
+
+              </ul>
+
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+          <table class="table table_hover">
+              <tr>
+                  <th>#</th>
+                  <th>dish name</th>
+                  <th>price</th>
+                  <th>quantity</th>
+                  <th>total</th>
+              </tr>
+              <tr>
+                  <td>1</td>
+                  <td>zhamantou</td>
+                  <td>5</td>
+                  <td>1</td>
+                  <td>5</td>
+              </tr>
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!--/.modal -->
+
+<script type="text/javascript">
+    function doShow(id){
+        $.ajax({
+            type:'get',
+            url:"{% url 'web_order_detail' %}",
+            dataType:'text',
+            data:{oid:id},
+            async: false,
+            success:function(res){
+                $("#myModal div.modal-body").empty().append(res);
+                $('#myModal').modal({keyboard:false})
+            },
+        });
+    }
+    function doChangeStatus(id,s){
+        var info = ["","","Do you want to delete the order?","Do you confirm to Done the order?"];
+        if(window.confirm(info[s])){
+            $.get("{% url 'web_order_status' %}",{oid:id,status:s},function(data){
+                if(data == "Y"){
+                    $("tr.oid"+id).remove();
+                    window.location.href = "{% url 'web_order_index' pIndex %}?{{mywhere|join:'&'}}";
+                }
+                else{
+                    alert("order operation fail");
+                }
+            },'text');
+        }
+    }
+    function doPay(id,s){
+        var info = ["","Do you cancel the pay of the order?","Do you confirm the pay of the order?",""];
+        if(window.confirm(info[s])){
+            $.get("{% url 'web_order_paymentstatus' %}",{oid:id,paymentstatus:s},function(data){
+                if(data == "Y"){
+                    $("tr.oid"+id).remove();
+                    window.location.href = "{% url 'web_order_index' pIndex %}?{{mywhere|join:'&'}}";
+                }
+                else{
+                    alert("order operation fail");
+                }
+            },'text');
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+</script>
+{% endblock %}

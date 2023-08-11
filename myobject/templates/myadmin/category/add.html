@@ -1,0 +1,26 @@
+{% extends 'myadmin/base.html' %}
+{% block main_body %}
+<div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add New Category</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="{% url 'myadmin_category_insert' %}" method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>name</label>
+                    <input type="text" name="name" class="form-control"  placeholder="name">
+                  </div>
+                </div>
+
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button> &nbsp
+                  <button type="reset" class="btn btn-primary">Clean</button>
+                </div>
+              </form>
+            </div>
+{% endblock %}

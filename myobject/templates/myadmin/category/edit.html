@@ -1,0 +1,49 @@
+{% extends 'myadmin/base.html' %}
+{% block main_body %}
+<div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Update category information</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="{% url 'myadmin_category_update' category.id %}" method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="name" class="form-control" value="{{category.name}}"  placeholder="name">
+                  </div>
+
+                  <div class="form-group">
+                    <label >create_at</label> <br>
+                    {{category.create_at}}
+                  </div>
+
+                  <div class="form-group">
+                    <label >update_at</label> <br>
+                    {{category.update_at}}
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">status:</label>
+                    <div class="controls">
+                      &nbsp; &nbsp;
+                      <input type="radio" name="status" class="input-xlarge" value="1"
+                      {% if category.status == 1 %}checked{% endif %} /> active
+                      &nbsp; &nbsp;
+                      <input type="radio" name="status" class="input-xlarge" value="2"
+                      {% if category.status == 2 %}checked{% endif %} /> inactive
+                    </div>
+                  </div>
+
+
+                </div>
+
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Update</button> &nbsp
+                  <button type="reset" class="btn btn-primary">Clean</button>
+                </div>
+              </form>
+            </div>
+{% endblock %}

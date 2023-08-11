@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+   <link rel="stylesheet" href="{% static 'myadmin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css'%}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{% static 'myadmin/plugins/icheck-bootstrap/icheck-bootstrap.min.css'%}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{% static 'myadmin/plugins/jqvmap/jqvmap.min.css'%}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'myadmin/dist/css/adminlte.min.css'%}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{% static 'myadmin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css'%}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{% static 'myadmin/plugins/daterangepicker/daterangepicker.css'%}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{% static 'myadmin/plugins/summernote/summernote-bs4.min.css'%}">
+</head>
+<body>
+<ul class="u1">
+  <li><a class="active" href="{% url 'web_index' %}">Order</a></li>
+  <li ><a href="{% url 'web_order_index' 1 %}?status=1">Current Order</a></li>
+  <li ><a href="{% url 'web_order_index' 1 %}?status=3">History Order</a></li>
+  <li ><a href="{% url 'web_order_index' 1 %}?status=2">Invalid Order</a></li>
+  <li><a href="#about">About</a></li>
+  <li><a href="#view">{{ request.session.webuser.username }}</a></li>
+  <li><a href="{% url 'web_logout' %}">logout</a></li>
+</ul>
+{% block main_body %}
+{% endblock %}
+
+
+
+</body>
+
+<style>
+
+div.card-header{
+  background-color:yellow;
+
+}
+
+.tables{
+    float:left;
+
+	margin:10px;
+
+}
+
+.table2{
+  width:680px;
+
+
+}
+.table1{
+  width:450px;
+}
+.table3{
+    margin-top:50px;
+    margin-left:100px;
+    width:1100px;
+    }
+.u1 {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color:#FFA500
+}
+
+.u2 {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color:#FF0000
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color:#FF4500
+}
+</style>
+
+<script src="{% static 'myadmin/plugins/jquery/jquery.min.js'%}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'myadmin/plugins/jquery-ui/jquery-ui.min.js'%}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'myadmin/plugins/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+<!-- ChartJS -->
+<script src="{% static 'myadmin/plugins/chart.js/Chart.min.js'%}"></script>
+<!-- Sparkline -->
+<script src="{% static 'myadmin/plugins/sparklines/sparkline.js'%}"></script>
+<!-- JQVMap -->
+<script src="{% static 'myadmin/plugins/jqvmap/jquery.vmap.min.js'%}"></script>
+<script src="{% static 'myadmin/plugins/jqvmap/maps/jquery.vmap.usa.js'%}"></script>
+<!-- jQuery Knob Chart -->
+<script src="{% static 'myadmin/plugins/jquery-knob/jquery.knob.min.js'%}"></script>
+<!-- daterangepicker -->
+<script src="{% static 'myadmin/plugins/moment/moment.min.js'%}"></script>
+<script src="{% static 'myadmin/plugins/daterangepicker/daterangepicker.js'%}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'myadmin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js'%}"></script>
+<!-- Summernote -->
+<script src="{% static 'myadmin/plugins/summernote/summernote-bs4.min.js'%}"></script>
+<!-- overlayScrollbars -->
+<script src="{% static 'myadmin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js'%}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'myadmin/dist/js/adminlte.js'%}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'myadmin/dist/js/demo.js'%}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{% static 'myadmin/dist/js/pages/dashboard.js'%}"></script>
+
+</html>

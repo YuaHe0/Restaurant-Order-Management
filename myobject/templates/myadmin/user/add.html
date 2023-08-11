@@ -1,0 +1,38 @@
+{% extends 'myadmin/base.html' %}
+{% block main_body %}
+<div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add New Staff</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="{% url 'myadmin_user_insert' %}" method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control"  placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label for="nickname">Nickname</label>
+                    <input type="text" name="nickname" class="form-control" id="nickname" placeholder="Nickname">
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                  </div>
+                  <div class="form-group">
+                    <label for="repeatpassword">Repeat Password</label>
+                    <input type="password" name="repeatpassword" class="form-control" id="repeatpassword" placeholder="Repeat Password">
+                  </div>
+                </div>
+
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button> &nbsp
+                  <button type="reset" class="btn btn-primary">Clean</button>
+                </div>
+              </form>
+            </div>
+{% endblock %}
